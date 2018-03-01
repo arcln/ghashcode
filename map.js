@@ -5,6 +5,10 @@ class Pos {
 		this.x = 0;
 		this.y = 0;
 	}
+
+	static getDistance(a, b) {
+		return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+	}
 }
 
 class Ride {
@@ -16,8 +20,7 @@ class Ride {
 	}
 
 	getLength() {
-		return Math.abs(this.startPos.x - this.endPos.x) +
-			Math.abs(this.startPos.y - this.endPos.y);
+		return getDistance(this.startPos, this.endPos);
 	}
 }
 
@@ -43,20 +46,54 @@ class Vehicle {
 		this.steps[step] = ride;
 	}
 
-	isAvailable(map, step, destination) {
+	getRideAtStep(step) {
 		let i = step;
 
 		while (!this.steps[i] && i >= 0)
 			i--;
+		return (this.steps[i]);
+	}
 
-		let ride = this.steps[i];
-		if (!ride)
-			return (true);
-		let maxLength = step - i;
+	getDistance(position) {
+		return getDistance(position, this.pos);
+	}
+
+	// getPositionAtStep(map, step) {
+	// 	let position = new Pos();
+	// 	let lastRide = null;
+	// 	let distance;
+	// 	let i = 0;
+
+	// 	while (i < this.steps.length() && i < step) {
+	// 		if (this.steps[i]) {
+	// 			if (lastRide) {
+	// 				distance = Pos.getDistance(this.pos, position);
+	// 				position = this.steps[i].pos;
+	// 				i += distance;
+	// 			}
+	// 			lastRide = this.steps[i];
+	// 		} else {
+	// 			++i;
+	// 		}
+	// 	}
+	// 	return position;
+	// }
+
+	isAvailable(map, step, destination) {
+		let ride;
+		let maxLength;
+		let totalDistance = 0;
+
+		ride = getRideAtStep(step);
+		if (ride)
+			totalDistance += ride.getLength();
+		totalDistance += Pos.getDistance(ride.endPos, destination);
+		maxLength = step - ride.startTime;
 
 		if (maxLength < map.steps)
 			maxLength = map.steps;
-		return (ride.getLength() <= maxLength);
+
+		return (totalDistance > maxLength)
 	}
 }
 
