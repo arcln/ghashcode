@@ -2,5 +2,5 @@
 
 const Parser = require('./parser');
 
-let map = Parser.parse('map.txt');
+let map = Parser.parse('./maps/map.txt');
 console.log(map);
