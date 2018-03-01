@@ -28,6 +28,8 @@ class Solution {
                 do {
                         car = this.vehicles[Math.floor(Math.random() * this.vehicles.length)];
                 } while(car.isAvailable(step, rideIt));
+
+                return car;
         }
 
         compute() {
