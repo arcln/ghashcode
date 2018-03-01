@@ -21,7 +21,7 @@ class Ride {
 	}
 
 	getLength() {
-		return getDistance(this.startPos, this.endPos);
+		return Pos.getDistance(this.startPos, this.endPos);
 	}
 }
 
@@ -44,7 +44,7 @@ class Vehicle {
 	}
 
 	assignRide(ride, step) {
-		this.steps[step] = ride;
+		this.steps[ride] = step;
 	}
 
 	getRideAtStep(step) {
@@ -56,7 +56,7 @@ class Vehicle {
 	}
 
 	getDistance(position) {
-		return getDistance(position, this.pos);
+		return Pos.getDistance(position, this.pos);
 	}
 
 	// getPositionAtStep(map, step) {
@@ -80,16 +80,17 @@ class Vehicle {
 	// 	return position;
 	// }
 
-	isAvailable(map, step, destination) {
+	isAvailable(step, destination, map) {
 		let ride;
-		let maxLength;
+		let maxLength = 0;
 		let totalDistance = 0;
 
-		ride = getRideAtStep(step);
-		if (ride)
+		ride = this.getRideAtStep(step);
+		if (ride) {
 			totalDistance += ride.getLength();
-		totalDistance += Pos.getDistance(ride.endPos, destination);
-		maxLength = step - ride.startTime;
+			totalDistance += Pos.getDistance(ride.endPos, destination);
+			maxLength = step - ride.startTime;
+		} else return true;
 
 		if (maxLength < map.steps)
 			maxLength = map.steps;

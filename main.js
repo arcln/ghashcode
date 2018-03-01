@@ -8,14 +8,17 @@ const fs = require('fs');
 function evalRun(map, solution) {
 	let finalPoints = 0;
 
-	solution.rides.forEach(ride => {
-		let points = ride.endTime - ride.startTime;
+	solution.vehicles.forEach(vehicle => {
+		vehicle.steps.forEach(step => {
+			if (step) {
+				let points = step.endTime - step.startTime;
+				if (step.startTime === 0) {
+					points += parseInt(map.bonus);
+				}
+				finalPoints += points;
+			}
+		});
 
-		if (ride.startTime === 0) {
-			points += map.bonus;
-		}
-
-		finalPoints += points;
 	});
 
 	return finalPoints;
@@ -32,16 +35,19 @@ function dumpRun(map, solution) {
 			}
 		});
 
-		const line = vehicles.rides.length + " " + vehicles.rides.join();
+		const line = vehicle.rides.length + " " + vehicle.rides.join();
 		out += line + '\n';
 	});
 
-	fs.delete('response.txt');
-	fs.appendFile('response.txt', out);
+	fs.writeFile(process.argv[2] + '.out', out, err => {
+		if (err)
+			throw err;
+		else
+			console.log('ok')
+	});
 }
 
-let map = Parser.parse('maps/map.txt');
-let solution = new Solution(map);
+let map = Parser.parse(process.argv[2]);
 let vehicles = [];
 let runs = [];
 for (let i = 0; i < map.vehicles; i++) {
@@ -50,6 +56,7 @@ for (let i = 0; i < map.vehicles; i++) {
 
 let bestRun = 0;
 for (let i = 0;; i++) {
+	let solution = new Solution(map);
 	solution.compute();
 	const val = evalRun(map, solution);
 	if (val > bestRun) {
