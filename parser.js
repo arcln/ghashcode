@@ -7,6 +7,7 @@ class Parser {
 	static parse(filename) {
 		const map = new Map();
 		const file = fs.readFileSync(filename).toString();
+		let id = -1;
 
 		file.split('\n').map((line, idx) => {
 			const tokens = line.split(' ');
@@ -21,6 +22,7 @@ class Parser {
 				map.rides = [];
 			} else {
 				map.rides[idx - 1] = new Ride();
+				map.rides[idx - 1].id = ++id;
 				map.rides[idx - 1].startPos = new Pos(tokens[0], tokens[1]);
 				map.rides[idx - 1].endPos = new Pos(tokens[2], tokens[3]);
 				map.rides[idx - 1].startTime = parseInt(tokens[4]);

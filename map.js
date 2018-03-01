@@ -13,6 +13,7 @@ class Pos {
 
 class Ride {
 	constructor() {
+		this.id = -1;
 		this.startPos = new Pos();
 		this.endPos = new Pos();
 		this.startTime = 0;
