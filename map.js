@@ -14,6 +14,11 @@ class Ride {
 		this.startTime = 0;
 		this.endTime = 0;
 	}
+
+	getLength() {
+		return Math.abs(this.startPos.x - this.endPos.x) +
+			Math.abs(this.startPos.y - this.endPos.y);
+	}
 }
 
 class Map {
@@ -28,6 +33,27 @@ class Map {
 	}
 }
 
+class Vehicle {
+	constructor() {
+		this.pos = new Pos();
+		this.steps = null;
+	}
+
+	assignRide(ride, step) {
+		this.steps[step] = ride;
+	}
+
+	isAvailable(step, destination) {
+		let i = step;
+
+		while (!this.steps[i] && i >= 0)
+			i--;
+
+		let ride = this.steps[i];
+		return (ride.getLength() <= step - i);
+	}
+}
+
 module.exports = {
-	Map, Ride, Pos
+	Vehicle, Map, Ride, Pos
 };
