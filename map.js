@@ -36,21 +36,27 @@ class Map {
 class Vehicle {
 	constructor() {
 		this.pos = new Pos();
-		this.steps = null;
+		this.steps = [];
 	}
 
 	assignRide(ride, step) {
 		this.steps[step] = ride;
 	}
 
-	isAvailable(step, destination) {
+	isAvailable(map, step, destination) {
 		let i = step;
 
 		while (!this.steps[i] && i >= 0)
 			i--;
 
 		let ride = this.steps[i];
-		return (ride.getLength() <= step - i);
+		if (!ride)
+			return (true);
+		let maxLength = step - i;
+
+		if (maxLength < map.steps)
+			maxLength = map.steps;
+		return (ride.getLength() <= maxLength);
 	}
 }
 
