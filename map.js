@@ -62,7 +62,7 @@ class Vehicle {
 		let offset = 0;
 		let i = 0;
 
-		while (i < this.steps.length() && i < step) {
+		while (i < this.steps.length && i < step) {
 			if (this.steps[i]) {
 				if (lastRide) {
 					distance = lastRide.getLength() + Pos.getDistance(lastRide.endPos, position) + offset;
@@ -86,11 +86,11 @@ class Vehicle {
 		let finalStep;
 
 
-		finalStep = getRideFinalStep(step);
+		finalStep = this.getRideFinalStep(step);
 		if (finalStep >= step)
 			return (false);
 
-		ride = getRideAtStep(step);
+		ride = this.getRideAtStep(step);
 		if (ride) {
 			totalDistance = ride.getLength() + Pos.getDistance(ride.endPos, destination);
 			maxLength = step - ride.startTime;
